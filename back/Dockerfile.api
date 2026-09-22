@@ -1,0 +1,18 @@
+FROM node:18
+
+LABEL maintainer="Maria Isabel <mimopb.2007@gmail.com>" \
+      version="1.0" \
+      description="API para Projeto to-do-list-react." \
+      created_by="Maria Isabel Mariz"
+
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN git clone https://github.com/EmmanoelMonteiro/to-do-list-api.git .
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]

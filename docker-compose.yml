@@ -1,0 +1,60 @@
+services:
+
+  api1:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.api
+    container_name: todo-api-1
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  api2:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.api
+    container_name: todo-api-2
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  api3:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.api
+    container_name: todo-api-3
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: todo-load-balancer
+    ports:
+      - "8080:80"
+    depends_on:
+      - api1
+      - api2
+      - api3
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.front
+    container_name: todo-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - nginx
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+networks:
+  todo-network:
+    driver: bridge
