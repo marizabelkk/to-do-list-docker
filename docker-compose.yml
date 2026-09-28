@@ -55,6 +55,18 @@ services:
       - todo-network
     restart: unless-stopped
 
+  db:
+    image: mysql:8.0
+    container_name: todo-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo_list
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - todo-network
+    restart: unless-stopped
+
 networks:
   todo-network:
     driver: bridge
